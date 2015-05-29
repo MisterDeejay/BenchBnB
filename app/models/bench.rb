@@ -12,4 +12,8 @@ class Bench < ActiveRecord::Base
     true
   end
 
+  def self.filter_by_range(range)
+    min, max = range["seatingMin"].to_i, range["seatingMax"].to_i
+    Bench.where(seating: (min..max))
+  end
 end

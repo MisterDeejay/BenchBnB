@@ -3,6 +3,7 @@ var Search = React.createClass({
     return (
       <div>
         <Map />
+        <SeatFilter />
         <BenchIndex benches={BenchStore.all()}/>
       </div>
     );

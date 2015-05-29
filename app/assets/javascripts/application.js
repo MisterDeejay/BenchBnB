@@ -15,7 +15,9 @@
 //= require turbolinks
 //= require react
 //= require react_ujs
+//= require ReactRouter.min
 //= require flux
+//= require underscore-min
 //= require eventemitter
 //= require components
 //= require_tree .

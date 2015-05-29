@@ -27,8 +27,10 @@ var BenchItem = React.createClass({
     }
     return (
       <li>
-        <h3 onMouseEnter={this.triggerStartBounce} onMouseLeave={this.triggerStopBounce}
-        onClick={this.changeState}>{this.props.bench.description}</h3>
+        <h3 className="benchItemHeader" onMouseEnter={this.triggerStartBounce}
+        onMouseLeave={this.triggerStopBounce} onClick={this.changeState}>
+          {this.props.bench.description}
+        </h3>
         {view}
       </li>
     )

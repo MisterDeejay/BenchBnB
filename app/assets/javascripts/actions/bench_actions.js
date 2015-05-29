@@ -11,5 +11,12 @@ BenchActions = {
       actionType: HighlightedBenchConstants.MOUSE_LEFT,
       bench: bench
     });
+  },
+
+  filterBenches: function(range){
+    AppDispatcher.dispatch({
+      actionType: BenchConstants.FILTER_BENCHES,
+      range: range
+    })
   }
 }

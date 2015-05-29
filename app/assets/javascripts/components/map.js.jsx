@@ -1,4 +1,5 @@
 var Map = React.createClass({
+  mixins: [ReactRouter.Navigation],
   updateMarkers: function() {
     var markerIDs = Object.keys(this.markers);
     BenchStore.all().forEach(function(bench){
@@ -21,7 +22,17 @@ var Map = React.createClass({
 
     this.removeOldMarkers(markerIDs);
   },
-
+  toggleBounce: function() {
+    var currentTarget = HighlightedBenchStore.currentBench();
+    if (currentTarget) {
+      this.bouncingMarker = this.markers[currentTarget.id];
+      this.bouncingMarker.setAnimation(google.maps.Animation.BOUNCE);
+    } else {
+      if (this.bouncingMarker.getAnimation() != null) {
+        this.bouncingMarker.setAnimation(null);
+      }
+    }
+  },
   removeOldMarkers: function(markerIDs){
     markerIDs.forEach(function(markerId){
       var marker = this.markers[markerId];
@@ -29,7 +40,6 @@ var Map = React.createClass({
       delete this.markers[markerId];
     }.bind(this));
   },
-
   componentDidMount: function(){
     var map = React.findDOMNode(this.refs.map);
     var mapOptions = {
@@ -41,9 +51,19 @@ var Map = React.createClass({
     this.markers = {};
 
     BenchStore.addChangeListener(this.updateMarkers);
-    HighlightedBenchStore.addChangeListener(this.bounceMarker);
-
+    HighlightedBenchStore.addChangeListener(this.toggleBounce);
     google.maps.event.addListener(this.map, 'idle', this.handleMapChange);
+    google.maps.event.addListener(this.map, 'click', this.addBench);
+  },
+  componentWillUnmount: function() {
+    BenchStore.removeAllListeners();
+    HighlightedBenchStore.removeAllListeners();
+
+    google.maps.event.clearListeners(this.map);
+  },
+  addBench: function(e) {
+    var lat = e.latLng.A, lng = e.latLng.F;
+    this.transitionTo('new', {}, {lat: lat, lng: lng});
   },
   handleMapChange: function(){
     var bounds = this.map.getBounds();
